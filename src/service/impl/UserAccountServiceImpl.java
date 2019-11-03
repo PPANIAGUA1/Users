@@ -41,7 +41,7 @@ public class UserAccountServiceImpl implements UserAccountService{
     {        
         UserAccount userAccount = null;
         try {
-            userAccount = dao.readUserbyID(userID); // Call to method of dao for recovering userAccount from database with id parameter 
+            userAccount = dao.getUserbyID(userID); // Call to method of dao for recovering userAccount from database with id parameter 
             //Only is allowed to handle user account whom create it
             if (userAccount.getAuthorities().getIdAuth() != this.authorities.getIdAuth()) //if user administrator is not who create userAccount return null
             {
@@ -65,7 +65,7 @@ public class UserAccountServiceImpl implements UserAccountService{
         UserAccount user = null;
 
         try {
-            user = dao.readUsersByIban(iban);// Call to method of dao for recovering userAccount from database with iban parameter 
+            user = dao.getUsersByIban(iban);// Call to method of dao for recovering userAccount from database with iban parameter 
         } catch (Exception e) {
             throw new ServiceException(e.toString());
         }
@@ -101,15 +101,11 @@ public class UserAccountServiceImpl implements UserAccountService{
     public String newUserAccount(UserAccount user) throws ServiceException 
     {
         String resul = "";
-        try {
-            if (foundIBan(user.getIban())) {//First we checked that this iban not exist
-                resul = "Error. Iban " + user.getIban() + " exist already in the system";
-            } else {
-                System.out.println(user.getId());
-                user.setAuthorities(this.authorities);//Inject object authorities with the logged administrator user
-                dao.updateUserAccount(user);// Call to method of dao to insert a new userAccount into database. 
-                resul = "User created succesfully";
-            }
+        try {          
+            System.out.println(user.getId());
+            user.setAuthorities(this.authorities);//Inject object authorities with the logged administrator user
+            dao.updateUserAccount(user);// Call to method of dao to insert a new userAccount into database. 
+            resul = "User created succesfully";           
         } catch (Exception e) {
             throw new ServiceException(e.toString());
         }
@@ -132,26 +128,7 @@ public class UserAccountServiceImpl implements UserAccountService{
       }
     }    
     
-     /**
-     * Search a user account by iban
-     * @param user
-     * @throws ServiceException
-     */    
-    private boolean foundIBan(String iban) throws ServiceException 
-    {
-        boolean existIban = true;
-        try {
-            if (null == dao.readUsersByIban(iban)) // Call to method of dao to find a userAccount with this iban.
-            {
-                existIban = false;
-            }
-        } catch (Exception e) {
-            throw new ServiceException(e.toString());
-        }
-        return existIban;
-    }
-
-     /**
+    /**
      * Search a user account by same parameters
      * @param user
      * @throws ServiceException

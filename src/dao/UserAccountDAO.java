@@ -14,11 +14,11 @@ import model.UserAccount;
 public interface UserAccountDAO 
 {
     //Recover a useraccount from db looking for id.
-    public UserAccount readUserbyID(Long id)
+    public UserAccount getUserbyID(Long id)
             throws Exception;
     
     //Recover a useraccount from db loking for iban.
-    public UserAccount readUsersByIban(String iban)
+    public UserAccount getUsersByIban(String iban)
             throws Exception;
     
     //Update a ussercount modified in the aplication

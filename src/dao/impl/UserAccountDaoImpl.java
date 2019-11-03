@@ -119,7 +119,7 @@ public class UserAccountDaoImpl implements UserAccountDAO
      * @throws ServiceException      
      */    
     @Override
-    public UserAccount readUserbyID(Long id) throws Exception 
+    public UserAccount getUserbyID(Long id) throws Exception 
     {      
         UserAccount user = null;
         try {
@@ -154,7 +154,7 @@ public class UserAccountDaoImpl implements UserAccountDAO
      * @throws ServiceException    
      */
     @Override
-    public UserAccount readUsersByIban(String iban) throws Exception 
+    public UserAccount getUsersByIban(String iban) throws Exception 
     {
       UserAccount user = null;
         try {

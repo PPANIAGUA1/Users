@@ -25,24 +25,31 @@ public class ControllerApp {
     }  
             
     public void newUser() {
-        //We create a new user object to inject in our system        
+        //We create a new user object to insert in our system  
+       
         UserAccount user = new UserAccount();
         user.setId(null);
-        System.out.println("Insert first name:");
-        scanner.nextLine();
-        user.setFirstName(scanner.nextLine());
+        
+        System.out.println("New user account");      
+        System.out.println("Insert first name:");      
+        user.setFirstName( scanner.next().trim());      
 
         System.out.println("Insert last name:");
-        user.setLastname(scanner.nextLine());
+        user.setLastname(scanner.next().trim());
 
         System.out.println("Insert iban:");
-        user.setIban(scanner.nextLine());
-        System.out.println(user);
-        //Once we have the user object, we passed it to the service for the insertion
-        String msg = userService.newUserAccount(user);
-
-        System.out.println(msg);
-        System.out.println();
+        user.setIban( scanner.next().trim());
+        String error = validateUserAccount(user);
+        if(error.equals(""))
+        {
+            System.out.println(user);
+            //Once we have the user object, we passed it to the service for the insertion
+            String msg = userService.newUserAccount(user);      
+            System.out.println(msg);
+            System.out.println();
+        }else{
+              System.out.println(error);
+        }     
     }
 
     public void findUser() {
@@ -116,23 +123,21 @@ public class ControllerApp {
             System.out.println("Iban: " + user.getIban() + " Modify?(Y/N)");
             if ("Y".equals(scanner.nextLine().toUpperCase())) {
                 System.out.println("New Iban:");
-                newIban = scanner.nextLine();
+                user.setIban(  scanner.nextLine());              
+                 modify = true;                
             }
-            if (!newIban.equals(user.getIban())) 
-            {                
-                //If a different iban has been introduced it is necessary to make sure that it does not exist
-                if (userService.getUserAccountByIban(newIban) == null) {
-                    user.setIban(newIban);
-                    modify = true;
-                } else {
-                    System.out.println("ERROR. This iban already exist");
-                }
-            }
+           
             if (modify) {
-                //Called to service to do the user update.
-                String resul = userService.modifyUserAccount(user);
-                System.out.println(resul);
-                System.out.println();
+                String error = validateUserAccount(user);
+                if (error.equals("")){
+                    //Called to service to do the user update.
+                   String resul = userService.modifyUserAccount(user);
+                   System.out.println(resul);
+                   System.out.println();
+                }else{
+                     System.out.println(error);
+                }
+               
             }
 
         } else {
@@ -171,4 +176,26 @@ public class ControllerApp {
         }
         System.out.println();
     }
+     
+     // Method to validate UserAccount  
+     private String validateUserAccount(UserAccount user)
+     {
+        String result = "";
+        
+        if (user.getFirstName()==null || user.getFirstName().equals("") ){
+            result = "ERROR. The first name is required";
+        }else if (user.getLastname()==null || user.getLastname().equals("")){
+             result = "ERROR. The last name is required";
+        }else if(user.getIban()==null || user.getIban().equals("")){
+            result = "ERROR. The iban is required";
+        }else {
+            UserAccount userAux=userService.getUserAccountByIban( user.getIban());
+             if(null != userAux && userAux.getId() != user.getId()){
+                    result = "ERROR. This iban already exist";
+        } 
+           
+        }
+        
+        return result;
+     }
 }
