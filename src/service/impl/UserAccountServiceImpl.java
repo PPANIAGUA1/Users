@@ -82,8 +82,7 @@ public class UserAccountServiceImpl implements UserAccountService{
     public String modifyUserAccount(UserAccount user) throws ServiceException 
     {
         String resul = "";
-        try {
-            System.out.println(user.getId()); // ask for id of user account to modify
+        try {           
             dao.updateUserAccount(user);// Call to method of dao to modify userAccount into database. 
             resul = "User saved succesfully";
         } catch (Exception e) {

@@ -1,5 +1,5 @@
 /*
- * Test to prove the modified of user account
+ * To test the modified of user account
  * We recover from database a user account and we'll modify it
  * we will use the user’s parameters and verify that it update in database.
  */

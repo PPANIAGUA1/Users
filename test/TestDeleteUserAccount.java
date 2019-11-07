@@ -1,6 +1,6 @@
 /*
  * Test to prove the delete of user account
- *  We created new user accounts in database and then we delete it
+ * We created new user accounts in database and then we delete it
  * and we'll use user account parameters to check that it don´t exist in database.
  */
 
